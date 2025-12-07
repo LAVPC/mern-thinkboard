@@ -45,26 +45,24 @@ app.use(rateLimiter);
 
 app.use("/api/notes", notesRoutes);
 
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "../frontend/dist")));
+// if (process.env.NODE_ENV === "production") {
+//     app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-    app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-    });
-}
+//     app.get("*", (req, res) => {
+//         res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+//     });
+// }
 
 // server.js (Corrected Production Block)
 
-// if (process.env.NODE_ENV === "production") {
-//     // FIX 1: Simplify path.join for express.static
-//     app.use(express.static(path.join(__
-// dirname, "frontend", "dist")));
+if (process.env.NODE_ENV === "production") {
+    // Correctly points from the root (mern-thinkboard) to the frontend/dist folder.
+    app.use(express.static(path.join(__dirname, "frontend", "dist")));
 
-//     app.get("*", (req, res) => {
-//         // FIX 2: Simplify path.join for res.sendFile
-//         res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
-//     });
-// }
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+    });
+}
 
 connectDB().then(() => {
     app.listen(PORT, () => {
